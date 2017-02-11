@@ -1,0 +1,28 @@
+---
+
+- debug: msg="SBT install"
+
+- name: Download SBT distribution
+  get_url: url="{{ sbt_url }}"
+           dest="/tmp/{{ sbt_src_file }}"
+           checksum="{{ sbt_src_checksum }}"
+
+- name: Extract SBT distribution
+  unarchive: src="/tmp/{{ sbt_src_file }}"
+             dest="{{ sbt_usr_parent_dir }}"
+             copy=no
+             creates="{{ sbt_usr_parent_dir }}/sbt-launcher-packaging-{{ sbt_version }}"
+             owner=root
+
+- name: Setup SBT distribution symlinks
+  file: src="{{ item.src }}"
+        dest="{{ item.dest }}"
+        state=link
+  with_items:
+    - { src: "{{ sbt_usr_parent_dir }}/sbt-launcher-packaging-{{ sbt_version }}", dest: "{{ sbt_usr_dir }}" }
+
+- name: Add path to profile (only if CentOS or RHEL)
+  template: src=etc/profile.d/sbt.sh.j2
+            dest="/etc/profile.d/sbt.sh"
+            mode=0644
+  when: spark_install_path and (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux')

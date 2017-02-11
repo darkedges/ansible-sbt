@@ -1,0 +1,7 @@
+sbt_version: 0.13.13
+sbt_src_file: "sbt-{{ sbt_version }}.tgz"
+sbt_url: "https://dl.bintray.com/sbt/native-packages/sbt/{{ sbt_version }}/{{ sbt_src_file }}"
+sbt_src_checksum: "md5:30a238d1b0cc2821da2b9b4e830ef204"
+
+sbt_usr_parent_dir: "/usr/lib"  
+sbt_usr_dir: "{{ sbt_usr_parent_dir }}/sbt"  
